@@ -1,0 +1,105 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+    <!-- Main Organizaciones  -->
+    <main class="container-sm shadow p-5 m-3 bg-body rounded">
+      <div class="row">
+        <div class="col">
+          <h2>Organizaciones</h2>
+        </div>
+      </div>
+      <div class="table-responsive p-5" >
+        <!-- Table -->
+        <table id="dataTable" class="dataTable table table-striped table-hover mt-3">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Tax ID</th>
+              <th>Pais</th>
+              <th>Ciudad</th>
+              <th>Dirección</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody class="p-4">
+            {% for org in organizaciones  %}
+              <tr>
+                <td>{{ org.id_org }}</td>
+                <td>{{ org.org_name }}</td>
+                <td>{{ org.org_tax_id}}</td>
+                <td>{{org.country}}</td>
+                <td>{{org.city}}</td>
+                <td>{{org.addres}}</td>
+                <td>
+                  <form action = "{% url 'tabs_organizacion' org.id_org %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-warning">Consultar</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+{% endblock %}
+
+<!-- ###################################### OLD INTERFACE ################################################### -->
+<div>
+      <!-- CAMPO DE BUSQUEDA -->
+      <form action="{% url 'buscar_organizacion' %}" method="POST">
+        {% csrf_token %}
+        <div class = "contenedor_b">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name = "buscar_organizacion" placeholder="Nombre de la Organizacion" aria-label="Recipient's username" aria-describedby="button-addon2">               
+                <button class="btn">Buscar</button>
+            </div>
+        </div>
+      </form>
+        <!-- TABLA DE ITEMS -->
+      <div class= "container">
+          <table class="table" style="background-color: white; ">
+            <thead>
+              <tr>
+                <th style="text-align: left;">Id</th>
+                <th style="text-align: left;">Nombre</th>
+                <th style="text-align: left">Tax ID</th>
+                <th style="text-align: left;">Pais</th>
+                <th style="text-align: left;">Ciudad</th>
+                <th style="text-align: left;">Dirección</th>
+                <th style="text-align: center;">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+  
+              {% for org in organizaciones  %}
+              <tr>
+                <th scope="row" style="text-align: left;">{{ org.id_org }}</th>
+                <td align="left">{{ org.org_name }}</td>
+                <td align="left">{{ org.org_tax_id}}</td>
+                <td align="left">{{org.country}}</td>
+                <td align="left">{{org.city}}</td>
+                <td align="left">{{org.addres}}</td>
+                <td align="center">
+                  <form action = "{% url 'tabs_organizacion' org.id_org %}" method="POST">
+                    {% csrf_token %}
+                  <button class="btn btn-outline-primary">Consultar</button>
+                  </form>
+                </td>
+              </tr>         
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+  
+      <!-- BOTON AGREGAR  -->
+      <div class = "boton">
+        <form action = "{% url 'form_organizacion' %}" method = "POST">
+          {% csrf_token %}
+          <button class="btn" >Agregar</button>
+        <form>
+       </div>
+  
+</div>

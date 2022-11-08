@@ -1,0 +1,187 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container-sm mt-5">
+  <!-- HEAD TABS -->
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Información</button>
+      <button class="nav-link" id="nav-people-tab" data-bs-toggle="tab" data-bs-target="#nav-people" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Personas</button>
+      <button class="nav-link" id="nav-sites-tab" data-bs-toggle="tab" data-bs-target="#nav-sites" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Sitios</button>
+      <button class="nav-link" id="nav-devices-tab" data-bs-toggle="tab" data-bs-target="#nav-devices" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Dispositivos</button>
+    </div>
+  </nav>
+  <!-- TABS Content -->
+  <div class="tab-content" id="nav-tabContent">
+    <!-- TAB Informacion -->
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <div class="card-body mx-auto" style="max-width: 800px;">
+            <h4 style = "color: black; padding-bottom:20px;">Información basica de la Organización </h4>
+            {% for o in org %}
+              <form>
+                <div class="form-outline mb-2">
+                  <input type="text" name = "nombre" class="form-control" value="{{o.org_name}}" disabled>
+                  <label class="form-label" for="">Organizacion</label>
+                </div>
+                <div class="row mb-2">
+                  <div class="col">
+                    <div class="form-outline">
+                      <input type="number" name = "tax_id" class="form-control" value="{{o.org_tax_id}}" disabled>
+                      <label class="form-label" for="">ID</label>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <input type="email" name = "postal"    class="form-control" value="{{o.postal}}"     disabled>
+                      <label class="form-label" for="">Postal</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-outline mb-2">
+                  <input type="text" name = "direccion" class="form-control" value="{{o.addres}}"     disabled>
+                  <label class="form-label" for="">Direccion</label>
+                </div>
+                <div class="row mb-2">
+                  <div class="col">
+                    <div class="form-outline">
+                      <input type="text" name = "ciudad"    class="form-control" value="{{o.city}}"       disabled> 
+                      <label class="form-label" for="">Ciudad</label>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <input type="text" name = "pais" class="form-control" value="{{o.country}}"    disabled>
+                      <label class="form-label" for="">Pais</label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!---->
+
+    <!-- TAB Personas -->
+    <div class="tab-pane fade" id="nav-people" role="tabpanel" aria-labelledby="nav-people-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <div class="row mb-2">
+          <div class="col">
+            <form action = "{% url 'form_organizacion' %}" method = "POST">
+              {% csrf_token %}
+              <button class="btn btn-success" >Agregar</button>
+            <form>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table id="dataTable" class="dataTable table table-striped mt-3">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in people %}
+                <tr class="text-center">
+                  <td>{{ p.name_people }}</td>
+                  <td>{{ p.email_people}}</td>
+                  <td>
+                    <form action="{% url 'eliminar_persona_org' p.email_people id_org %}" method="POST">
+                      {% csrf_token %}
+                      <button class="btn btn-danger">Eliminar</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!---->
+
+    <!-- TAB Sitios -->
+    <div class="tab-pane fade" id="nav-sites" role="tabpanel" aria-labelledby="nav-sites-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <!-- Table -->
+        <div class="table-responsive">
+          <table id="dataTable" class="dataTable table table-striped mt-3">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Pais</th>
+                <th>Ciudad</th>
+                <th>Dirección</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for val in sites %}
+                <tr class="text-center">
+                  <td>{{val.id_site}}</td>
+                  <td>{{val.site_name}}</td>
+                  <td>{{val.country}}</td>
+                  <td>{{val.city}}</td>
+                  <td>{{val.address}}</td>
+                  <td>
+                    <form action = "{% url 'form_organizacion' %}" method = "POST">
+                      {% csrf_token %}
+                      <button type="button" class="btn btn-danger">Eliminar</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!---->
+
+    <!-- TAB Dispositivos -->
+    <div class="tab-pane fade" id="nav-devices" role="tabpanel" aria-labelledby="nav-devices-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <!-- Table -->
+        <div class="table-responsive">
+          <table id="dataTable" class="dataTable table table-striped table-hover mt-3">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>Id</th>
+                <th>Ip</th>
+                <th>Procesador</th>
+                <th>Sistema Operativo</th>
+                <th>Tipo de Equipo</th>
+                <th>Fecha de instalacion</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key,value in devices.items %}
+                {% for val in value %}
+                  <tr>
+                    <td>{{val.id_device}}</td>
+                    <td>{{val.ip_from}}</td>
+                    <td>{{val.id_cpu.cpu_name}}</td>
+                    <td>{{val.id_os.os_name}}</td>
+                    <td>{{val.id_device_type.type_name}}</td>
+                    <td>{{val.date_created}}</td>
+                    <td><button type="button" class="btn btn-danger">Eliminar</button></td>
+                  </tr>
+                {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!---->
+  </div>
+{% endblock %}
+

@@ -1,0 +1,92 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+<!-- FORMULARIO ORGANIZACIONES-->
+{% block content %}
+    <main class="container_sm shadow p-5 m-3 bg-body rounded">
+        <div>
+            <h2 class="text-center">Agregar Organizacion</h2>
+        </div>
+        <!-- form Organizacion -->
+        <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+            <div class="card-body mx-auto" style="max-width: 800px;">
+                <form action="{% url 'agregar_org' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-outline mb-2">
+                        <input type="text" name = "name" class="form-control" placeholder=" Nombre Organizacion">
+                        <label class="form-label" for="">Organizacion</label>
+                    </div>
+                    <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-outline">
+                        <input type="number" name = "id_tag" class="form-control" placeholder="NIT">
+                        <label class="form-label" for="">NIT</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                        <input type="text" name = "postal"    class="form-control" placeholder="Postal">
+                        <label class="form-label" for="">Postal</label>
+                        </div>
+                    </div>
+                    <div class="form-outline mb-2">
+                        <input type="text" name = "address" class="form-control" placeholder="Direccion">
+                        <label class="form-label" for="">Direccion</label>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <input type="text" name = "city"    class="form-control" placeholder="Ciudad">
+                                <label class="form-label" for="">Ciudad</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <input type="text" name = "country" class="form-control" placeholder="Pais">
+                                <label class="form-label" for="">Pais</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock%}
+
+
+<!-- ###################################### OLD INTERFACE ################################################### -->
+<div class="contenedor">
+    <div class="contenedor_form">
+        <h4>Agregar información de la Organización: </h4>
+        <form action="{% url 'agregar_org' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name = "name" class="form-control" placeholder="Nombre de la Organización">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "id_tag" class="form-control" placeholder="NIT">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "country" class="form-control" placeholder="Pais">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "city" class="form-control" placeholder="Ciudad">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "address" class="form-control" placeholder="Dirección">
+            </div>
+            <div class="mb-3">
+                <input type="text" name = "postal" class="form-control" placeholder="Codigo postal">
+            </div>
+            <div class = "boton_agregar">
+                <button class="btn">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+  <div class="container_sm shadow p-5 m-3 bg-body rounded">
+    <div>
+        <h2 class="text-center">Agregar Sitio</h2>
+    </div>
+    <!-- form site -->
+    <div class="container_sm shadow p-5 bg-body rounded " style="max-width: 800px;">
+        <div class="card-body mx-auto" style="max-width: 700px;">
+            <form action="{% url 'add_site' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-outline mb-4">
+                    <input type="text" name = "nameSite" class="form-control" placeholder=" Nombre Sitio">
+                </div>
+                <div class="row">
+                    <div class="col mb-4">
+                        <div class="form-outline">
+                            <input type="text" name = "countrySite" class="form-control" placeholder="Pais">
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="form-outline">
+                            <input type="text" name = "citySite" class="form-control" placeholder="Ciudad">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="text" name = "addressSite" class="form-control" placeholder="Direccion">
+                </div>
+                <div class="row">
+                    <div class="col mb-4">
+                        <div class="form-outline">
+                            <input type="number" name = "postalSite"    class="form-control" placeholder="Codigo postal">
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="form-outline">
+                            <select class="form-select" name="organizations_idOrganization" aria-label="Organización">
+                                <option selected value="default">Seleccione la Organizacion</option>
+                                {% for organization in organizations %}
+                                <option value="{{organization.idOrganization }}">{{organization.nameOrganization }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-primary">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+

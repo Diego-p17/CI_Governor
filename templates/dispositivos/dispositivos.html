@@ -1,0 +1,175 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container_sm shadow p-5 mb-5 bg-body rounded">
+  <div class="row">
+    <div class="col">
+      <h2>Dispositivos</h2>
+    </div>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive p-5">
+    <table id="dataTable" class="dataTable table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Ip</th>
+          <th>Tipo</th>
+          <th>Fecha Instalación</th>
+          <th>Procesador</th>
+          <th>Sistema Operativo</th>
+          <th>Zona</th>
+          <th class="text-center">Opciones</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        {% for val in devices %}
+        <tr>
+          <td>{{val.ip_from                   }}</td>
+          <td>{{val.id_device_type.type_name  }}</td>
+          <td>{{val.date_created              }}</td>
+          <td>{{val.id_cpu.cpu_name           }}</td>
+          <td>{{val.id_os.os_name             }}</td>
+          <td>{{val.id_zone                    }}</td>
+          <td>
+            <div class="d-flex flex-column align-items-center" >
+              <div class=" d-inline">
+                <form action="{% url 'formulario_actualizar_dispositivo' val.id_device %}" method="POST"> 
+                  {% csrf_token %}
+                  <button class="btn btn-outline-primary" style="width:100px;">Modificar</button>
+                </form>
+              </div>
+              <div class=" d-inline">
+                <form action="{% url 'eliminar_dispositivo' val.id_device %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-danger" style="width:100px; margin:10px;">Eliminar</button>
+                </form>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <form action = "{% url 'form_dispositivo' %}" method = "POST">
+      {% csrf_token %}
+      <button class="btn btn-success" >Agregar</button>
+    <form>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+<div>
+  <body>
+
+
+
+    <!-- TITULO -->
+    <div class="title1">
+        <h3>Dispositivos</h3>
+    </div>
+
+
+    <!-- CAMPO DE BUSQUEDA -->
+    <form action = "{% url 'buscar_dispositivos' %}" method = "POST">
+      {% csrf_token %}
+      <div class = "contenedor_b">
+          <div class="input-group mb-3">
+              <input type="text" class="form-control" name="dispositivo" placeholder="Ip del dispositivo" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <button class="btn">Buscar</button>
+          </div>
+      </div>
+    </form>
+      <!-- TABLA DE ITEMS -->
+      <div class="container">
+        <table class="table" style="background-color: white; ">
+          <thead>
+            <tr>
+              <th style="text-align: left;">Ip</th>
+              <th style="text-align: left;">Tipo</th>
+              <th style="text-align: left;">Fecha Instalación</th>
+              <th style="text-align: left;">Procesador</th>
+              <th style="text-align: left;">Sistema Operativo</th>
+              <th style="text-align: left;">Zona</th>
+              <th style="text-align: center;">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for val in devices %}
+            
+            <tr>
+              
+              <td align="left">{{val.ip_from}}</td>
+              <td align="left">{{val.id_device_type.type_name}}</td>
+              <td align="left">{{val.date_created}}</td>
+              <td align="left">{{val.id_cpu.cpu_name}}</td>
+              <td align="left">{{val.id_os.os_name}}</td>
+              <td align="left">{{val.id_zone}}</td>
+              
+              <td align="center">
+                <div style = " display: inline-block; ">
+                  
+                  <form action="{% url 'formulario_actualizar_dispositivo' val.id_device %}" method="POST"> 
+                    {% csrf_token %}
+                    <button class="btn btn-outline-primary" style="width:100px;">Modificar</button>
+                  </form>
+                </div>
+                <div style = " display: inline-block;">
+                  <form action="{% url 'eliminar_dispositivo' val.id_device %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger" style="width:100px; margin:10px;">Eliminar</button>
+                  </form>
+                </div>
+              </td>
+            </tr>         
+            {% endfor %}{% for val in devices %}
+            
+            <tr>
+              
+              <td align="left">{{val.ip_from}}</td>
+              <td align="left">{{val.id_device_type.type_name}}</td>
+              <td align="left">{{val.date_created}}</td>
+              <td align="left">{{val.id_cpu.cpu_name}}</td>
+              <td align="left">{{val.id_os.os_name}}</td>
+              <td align="left">{{val.id_zone}}</td>
+              
+              <td align="center">
+                <div style = " display: inline-block; ">
+                  
+                  <form action="{% url 'formulario_actualizar_dispositivo' val.id_device %}" method="POST"> 
+                    {% csrf_token %}
+                    <button class="btn btn-outline-primary" style="width:100px;">Modificar</button>
+                  </form>
+                </div>
+                <div style = " display: inline-block;">
+                  <form action="{% url 'eliminar_dispositivo' val.id_device %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger" style="width:100px; margin:10px;">Eliminar</button>
+                  </form>
+                </div>
+              </td>
+            </tr>         
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    <!-- BOTON AGREGAR  -->
+    <div class = "boton">
+      <form action = "{% url 'form_dispositivo' %}" method = "POST">
+        {% csrf_token %}
+        <button class="btn" >Agregar</button>
+      <form>
+     </div>
+
+</body>
+</div>
+

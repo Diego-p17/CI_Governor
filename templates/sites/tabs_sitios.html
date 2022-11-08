@@ -1,0 +1,307 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+
+<div class="container-sm mt-5">
+  <!-- HEAD TABS -->
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Información</button>
+      <button class="nav-link" id="nav-zone-tab" data-bs-toggle="tab" data-bs-target="#nav-zone" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Zona</button>
+      <button class="nav-link" id="nav-devices-tab" data-bs-toggle="tab" data-bs-target="#nav-devices" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Dispositivos</button>
+    </div>
+  </nav>
+
+  <!-- TABS CONTENT  -->
+  <div class="tab-content" id="nav-tabContent">
+    <!-- TAB Informacion -->
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <div class="card-body mx-auto" style="max-width: 800px;">
+          <h2 style = "color: black; padding-bottom:20px;">Información basica del sitio</h2>
+          {% for item in site %}
+            <form>
+              <div class="form-outline mb-2">
+                <input type="text" name = "nombre" class="form-control" value="{{item.site_name}}" disabled>
+                <label class="form-label" for="">Sitio</label>
+              </div>
+              <div class="row mb-2">
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="number" name = "country" class="form-control" value="{{item.country}}" disabled>
+                    <label class="form-label" for="">Pais</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="text" name = "city" class="form-control" value="{{item.city}}" disabled>
+                    <label class="form-label" for="">Ciudad</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-outline mb-2">
+                <input type="text" name = "addres" class="form-control" value="{{item.address}}" disabled>
+                <label class="form-label" for="">Direccion</label>
+              </div>
+              <div class="form-outline mb-2">
+                <input type="text" name = "postal" class="form-control" value="{{item.postal}}" disabled>
+                <label class="form-label" for="">Postal</label>
+              </div>
+            </form>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB Zona -->
+    <div class="tab-pane fade" id="nav-zone" role="tabpanel" aria-labelledby="nav-zone-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <!-- Table -->
+        <div class="table-responsive p-5">
+          <h2 class="mb-5">Sitios</h2>
+          <table id="dataTable" class="dataTable table table-striped mt-3">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>id</th>
+                <th>Zona</th>
+                <th>Sitio</th>
+                <th class="text-center">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for zone in zones %}
+                <tr>
+                  <td>{{zone.id_zone}}</td>
+                  <td>{{zone.zone_name}}</td>
+                  <td>{{zone.id_site}}</td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-outline-primary">Modificar</button>
+                    <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB CPU -->
+    <div class="tab-pane fade" id="nav-devices" role="tabpanel" aria-labelledby="nav-devices-tab">
+      <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+        <!-- Table -->
+        <div class="table-reponsive p-5">
+          <h2 class="mb-5">CPU</h2>
+          <table id="dataTable" class="dataTable table table-striped mt-3">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>Ip</th>
+                <th>Procesador</th>
+                <th>Sistema Operativo</th>
+                <th>Tipo de Equipo</th>
+                <th>Fecha de instalacion</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key,value in devices.items %}
+                {% for val in value %}
+                  <tr>
+                    <td>{{val.ip_from}}</td>
+                    <td>{{val.id_cpu.cpu_name}}</td>
+                    <td>{{val.id_os.os_name}}</td>
+                    <td>{{val.id_device_type.type_name}}</td>
+                    <td>{{val.date_created}}</td>
+                    <td>
+                      <button type="button" class="mb-2 btn btn-primary">Modificar</button>
+                      <button type="button" class="btn btn-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+<!-- ###################################### OLD INTERFACE ################################################### -->
+<div class="container">
+  <ul class="tab-container">
+
+    <!-- TAB INFORMACION ORGANIZACION -->
+    <li>
+      <input type="radio" id="tab-0" name="tab" checked/>
+      <label for="tab-0">Información</label>
+
+      <div class="tab-content">
+        <div class="inner">
+          <div class="inner-left">
+
+            <div class="contenedor">
+              <div class="contenedor_form" style="padding-top: 30px;">
+                  <h4 style = "color: black; padding-bottom:20px;">Información basica del sitio</h4>
+                  {% for o in site %}
+                  <form>
+                      <div class="mb-3">
+                      <input type="text" name = "nombre" class="form-control" value="{{o.site_name}}" disabled>
+                      </div>
+                      <div class="mb-3">
+                          <input type="email" name = "paies" class="form-control" value="{{o.country}}" disabled>
+                      </div>
+
+                      <div class="mb-3">
+                          <input type="email" name = "ciudad" class="form-control" value="{{o.city}}" disabled>
+                      </div>
+
+                      <div class="mb-3">
+                          <input type="email" name = "direccion" class="form-control" value="{{o.address}}" disabled>
+                      </div>
+                      
+                      <div class="mb-3">
+                          <input type="email" name = "postal" class="form-control" value="{{o.postal}}" disabled>
+                      </div>
+                  </form>
+                  {% endfor %}
+              </div>
+          </div>
+          </div>
+
+        </div>
+      </div>
+    </li>
+
+    
+    <!-- TABS ZONAS -->
+    <li>
+      <input type="radio" id="tab-3" name="tab" />
+      <label for="tab-3">Zonas</label>
+
+      <div class="tab-content">
+        <div class="inner">
+          <div class="inner-left">
+            
+            <div class = "contenedor_b">
+              <div class="input-group mb-3" style="height: 40px; width: 500px;">
+                  <input type="text" class="form-control" placeholder="Nombre del sitio" >
+                  <button class="btn" type="button">Buscar</button>
+              </div>
+            </div>
+
+            <div style="height: 30px; width: 950px; padding-bottom: 39px;">
+              <table class="table" style="background-color:white; border-bottom: 1px solid; ">
+                <thead>
+                  <tr>
+                    <th style="text-align: left;">Id</th>
+                    <th style="text-align: left; padding-left: 2px; padding-right: 2px;">Nombre</th>
+                    <th style="text-align: center; ">Opciones</th>
+                  </tr>
+                </thead>
+                </table>
+                </div>
+            
+            <div class="overflow-auto">
+              <div style="height: 360px; width: 950px; overflow-x: hidden;">
+              <table class="table" style="background-color: white; ">
+                <thead>
+                  <tr>                
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for zone in zones %}
+                  <tr>
+                    <th scope="row" style="text-align: center;">{{zone.id_zone}}</th>
+                    <td align="center">{{zone.zone_name}}</td>
+                    <td align="center">{{zone.id_site}}</td>
+                    
+                    <td align="center">
+                      <button type="button" class="btn btn-outline-primary">Modificar</button>
+                      <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  
+                </tbody>
+              </table>
+
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- TABS EQUIPOS -->
+    <li>
+      <input type="radio" id="tab-4" name="tab" />
+      <label for="tab-4">Equipos</label>
+
+      <div class="tab-content">
+        <div class="inner">
+          <div class="inner-left">
+            
+            <div class = "contenedor_b">
+              <div class="input-group mb-3" style="height: 40px; width: 500px;">
+                  <input type="text" class="form-control" placeholder="Nombre del sitio" >
+                  <button class="btn" type="button">Buscar</button>
+              </div>
+            </div>
+
+            <div style="height: 30px; width: 950px; padding-bottom: 39px;">
+              <table class="table" style="background-color:white; border-bottom: 1px solid; ">
+                <thead>
+                  <tr>
+                    <th style="text-align: left;">Id</th>
+                    <th style="text-align: center; ">Ip</th>
+                    <th style="text-align: center; ">Procesador</th>
+                    <th style="text-align: center; ">Sistema Operativo</th>
+                    <th style="text-align: center; ">Tipo de Equipo</th>
+                    <th style="text-align: center; ">Fecha de instalacion</th>
+                    
+                    <th style="text-align: center; ">Opciones</th>
+                  </tr>
+                </thead>
+                </table>
+                </div>
+            
+            <div class="overflow-auto">
+              <div style="height: 360px; width: 950px; overflow-x: hidden;">
+              <table class="table" style="background-color: white; ">
+                <thead>
+                  <tr>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  {% for key,value in devices.items %}
+                  {% for val in value %}
+                  <tr>
+                    <th scope="row" style="text-align: center;">{{key}}</th>
+                    <td align="center">{{val.ip_from}}</td>
+                    <td align="center">{{val.id_cpu.cpu_name}}</td>
+                    <td align="center">{{val.id_os.os_name}}</td>
+                    <td align="center">{{val.id_device_type.type_name}}</td>
+                    <td align="center">{{val.date_created}}</td>
+                    <td align="center">
+                      <button type="button" class="btn btn-outline-primary">Modificar</button>
+                      <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>         
+                  {% endfor %}
+                  {% endfor %}
+                  
+                </tbody>
+              </table>
+            
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

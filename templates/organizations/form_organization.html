@@ -1,0 +1,87 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+<!-- FORMULARIO ORGANIZACIONES-->
+{% block content %}
+    <div class="container_sm shadow p-5 m-3 bg-body rounded">
+        <div>
+            <h2 class="text-center">Agregar Organizacion</h2>
+        </div>
+        <!-- form Organizacion -->
+        <div class="container_sm shadow p-4 bg-body rounded " style="max-width: 800px;">
+            <div class="card-body mx-auto" style="max-width: 700px;">
+                <form action="{% url 'add_organization' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">
+                        <input type="text" name = "nameOrg" class="form-control" placeholder=" Nombre Organizacion" required>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-4">
+                            <div class="form-outline">
+                                <input type="number" name = "taxIdOrg" class="form-control" placeholder="NIT" required>
+                            </div>
+                        </div>
+                        <div class="col mb-4">
+                            <div class="form-outline">
+                                <input type="text" name = "postalOrg"    class="form-control" placeholder="Postal">
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="text" name = "addressOrg" class="form-control" placeholder="Direccion" required>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-4">
+                            <div class="form-outline">
+                                <input type="text" name = "cityOrg"    class="form-control" placeholder="Ciudad" required>
+                            </div>
+                        </div>
+                        <div class="col mb-4">
+                            <div class="form-outline">
+                                <input type="text" name = "countryOrg" class="form-control" placeholder="Pais" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock%}
+
+
+<!-- ###################################### OLD INTERFACE ################################################### -->
+<div class="contenedor">
+    <div class="contenedor_form">
+        <h4>Agregar información de la Organización: </h4>
+        <form action="{% url 'agregar_org' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name = "name" class="form-control" placeholder="Nombre de la Organización">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "id_tag" class="form-control" placeholder="NIT">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "country" class="form-control" placeholder="Pais">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "city" class="form-control" placeholder="Ciudad">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name = "address" class="form-control" placeholder="Dirección">
+            </div>
+            <div class="mb-3">
+                <input type="text" name = "postal" class="form-control" placeholder="Codigo postal">
+            </div>
+            <div class = "boton_agregar">
+                <button class="btn">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>

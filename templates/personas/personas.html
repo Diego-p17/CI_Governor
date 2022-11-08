@@ -1,0 +1,124 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+  <div class="container_sm shadow p-5 mb-5 bg-body rounded">
+    <div class="row">
+      <div class="col">
+        <h2>Personas</h2>
+      </div>
+    </div>
+    <!-- Table -->
+    <div class="table-responsive p-5">
+      <table id="dataTable" class="dataTable table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Organizacion</th>
+            <th class="text-center">Opciones</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          {% for persona in personas  %}
+            <tr>
+              <td>{{persona.name_people}}</td>
+              <td>{{persona.id_org}} </td>
+              <td class="text-center">
+                <div class="d-inline-block">
+                  <form action = "{% url 'tabs_personas' persona.email_people %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-primary" >Ajustes</button>
+                  </form>
+                </div>
+                <div class="d-inline-block">
+                  <form action = "{% url 'actualizar_persona' persona.email_people %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger">Eliminar</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- BOTON AGREGAR  -->
+  <div class = "boton">
+    <form action = "{% url 'form_persona' %}" method = "POST">
+      {% csrf_token %}
+      <button class="btn btn-success" >Agregar</button>
+    <form>
+  </div>
+  </div>
+{% endblock%}
+
+<!-- ########################### OlD INTERFACE ######################### -->
+<div>
+  <!-- TITULO -->
+  <div class="title1">
+    <h3>Personas</h3>
+</div>
+
+
+<!-- CAMPO DE BUSQUEDA -->
+<form action="{% url 'buscar_persona' %}"method="POST">
+  {% csrf_token %}
+  <div class = "contenedor_b">
+      <div class="input-group mb-3">
+          <input type="text" name = "buscar_persona" class="form-control" placeholder="Nombre de la Persona" aria-label="Recipient's username" aria-describedby="button-addon2">
+          <button class="btn">Buscar</button>
+      </div>
+  </div>
+</form>
+
+<div class="container"> 
+  <!-- TABLA DE ITEMS -->
+
+    <table class="table" style="background-color: white; ">
+      <thead>
+        <tr>
+          
+          <th style="text">ID</th>
+          <th style="text">Nombre</th>
+          <th style="text">Organización</th>
+          <th style="text-align: center;">Opciones</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for persona in personas %}
+        <tr>
+          <th scope="row" style="text-align: left;">{{ persona.name_people }}</th>
+          <td align="left">{{ persona.id_org }}</td>
+ 
+          <td align="center">
+            <div style = " display: inline-block;"> 
+              <form action = "{% url 'tabs_personas' persona.email_people %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary" >Ajustes</button>
+              </form> 
+            </div>
+
+          <div style = " display: inline-block;">
+            <form action = "{% url 'actualizar_persona' persona.email_people %}" method="POST">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger">Eliminar</button>
+            </form>
+          </div>
+
+          </td>
+        </tr>         
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+<!-- BOTON AGREGAR  -->
+  <div class = "boton">
+    <form action = "{% url 'form_persona' %}" method = "POST">
+      {% csrf_token %}
+      <button class="btn" >Agregar</button>
+    <form>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+<main class="container_sm shadow p-3 m-3 bg-body rounded">
+  <div>
+    <h2 class="text-center">Agregar persona</h2>
+  </div>
+  <!-- form PEOPLE -->
+  <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+    <div class="card-body mx-auto " >
+      <form action="{% url 'agregar_persona' %}" method="POST">
+        {% csrf_token %}
+        <!-- NOMBRE -->
+        <div class="form-outline mb-2">
+          <input type="text" name = "name" class="form-control" placeholder="nombre" >
+          <label class="form-label" for="">Nombre</label>
+        </div>
+        <!-- CORREO -->
+        <div class="form-outline mb-2">
+          <input type="email" name = "email" class="form-control" placeholder="email">
+          <label class="form-label" for="">Correo</label>
+        </div>
+        <!-- ORGANIZACION -->
+        <div class="form-outline">
+          <select class="form-select" name="org" aria-label="Organización">
+            {% for o in orgs %}
+              <option value="{{o.id_org}}">{{o.org_name}}</option>
+            {% endfor %}
+          </select>
+          <label class="form-label" for="">organización</label>
+        </div>
+        <div class="d-block mt-3">
+          <button class="btn btn-primary w-100";">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
+<!-- ########################### OLD INTERFACE ################################# -->
+<div class="contenedor">
+  <div class="contenedor_form">
+      <h4>Agregar información nueva persona: </h4>
+      <form action="{% url 'agregar_persona' %}" method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <input type="text" name = "name" class="form-control" placeholder="Nombre">
+          </div>
+
+          <div class="mb-3">
+            <input type="email" name = "email" class="form-control" placeholder="Correo electronico">
+          </div>
+
+          <div class="mb-3">
+            <select class="form-select" name = "org" aria-label="Site" >
+                <option selected value="0">Sin organización</option>
+                {% for o in orgs %}
+                <option value="{{o.id_org}}">{{o.org_name}}</option>
+                {% endfor %}
+                </select>
+        </div>
+
+          <div class = "boton_agregar">
+              <button class="btn">Agregar</button>
+          </div>
+      </form>
+  </div>
+</div>

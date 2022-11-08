@@ -1,0 +1,347 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+  <div class="container-sm mt-5">
+    <!-- HEAD TABS -->
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Información</button>
+        <button class="nav-link" id="nav-permissions-tab" data-bs-toggle="tab" data-bs-target="#nav-permissions" type="button" role="tab" aria-controls="nav-permissions" aria-selected="false">Permisos</button>
+        <button class="nav-link" id="nav-devices-tab" data-bs-toggle="tab" data-bs-target="#nav-devices" type="button" role="tab" aria-controls="nav-devices" aria-selected="false">Equipos</button>
+      </div>
+    </nav>
+    <!-- TABS CONTENT  -->
+    <div class="tab-content" id="nav-tabContent">
+      <!-- TAB Informacion -->
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="container_sm shadow p-3 mb-5 bg-body rounded">
+          <div class="card-body mx-auto" style="max-width: 800px;">
+            <h2 class="mb-3">Informacion</h2>
+
+            <form action="{% url 'update_persona' persona.email_people %}" method="POST">
+              {% csrf_token %}
+              <div class="form-outline mb-2">
+                <input type="text" name = "name" class="form-control" value="{{persona.name_people}}" >
+                <label class="form-label" for="">Nombre</label>
+              </div>
+
+              <div class="form-outline mb-2">
+                <input type="email" name = "email" class="form-control" value="{{persona.email_people}}">
+                <label class="form-label" for="">Correo</label>
+              </div>
+
+              <div class=" form-outline mb-2">
+                <select class="form-select"name = "org" aria-label="Site">
+                  {% for o in orgs %}
+                    {% if o.id_org == org_ %}
+                      <option selected value="{{o.id_org}}">{{o.org_name}}</option>
+                    {% else %}
+                      <option value="{{o.id_org}}">{{o.org_name}}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <label class="form-label" for="">Organización</label>
+              </div>
+              <button class="btn btn-primary">Actualizar</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB Permisos -->
+      <div class="tab-pane fade show" id="nav-permissions" role="tabpanel" aria-labelledby="nav-permissions-tab">
+        <div class="container_sm shadow p-5 mb-5 bg-body rounded">
+          <div class="row">
+            <h2 class="text-center">Permisos de <span class="fw-bold">{{namep}}</span></h2>
+          </div>
+          <!-- TABLE -->
+          <div class="table-responsive">
+            <table id="dataTable" class="dataTable table table-striped mt-3">
+              <thead class="table-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Organización</th>
+                  <th>Sitio</th>
+                  <th>Zona</th>
+                  <th>Id device</th>
+                  <th>Nvl Acceso</th>
+                  <th class="text-center">Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for permiso in permisos %}
+                  <tr>
+                    <td> {{ permiso.id_permission }} </td>
+                    <td> {{ permiso.id_org        }} </td>
+                    <td> {{ permiso.id_site       }} </td>
+                    <td> {{ permiso.id_zone       }} </td>
+                    <td> {{ permiso.id_dev        }} </td>
+                    <td> {{ permiso.level         }} </td>
+                    <td>
+                        <div class="d-inline">
+                            <form action = "{% url 'modificar_permiso' email permiso.id_permission %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-primary">Modificar</button>
+                            </form> 
+                        </div>
+                        <div class="d-inline">
+                            <form action = "{% url 'eliminar_permiso' email permiso.id_permission %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- ADD PERMISSION -->
+          <div class="d-inline-block">
+            <form action = "{% url 'formulario_permisos' email %}" method = "POST">
+              {% csrf_token %}
+              <button class="btn btn-success" >Nuevo permiso</button>
+            <form>
+          </div>
+        </div>
+      </div>
+      <!-- TAB EQUIPOS -->
+      <div class="tab-pane fade show" id="nav-devices" role="tabpanel" aria-labelledby="nav-devices-tab">
+        <div class="container_sm shadow p-5 mb-5 bg-body rounded">
+          <div class="row mb-5">
+            <h2>Equipos</h2>
+          </div>
+          <div class="table-responsive">
+            <table id="dataTable" class="dataTable table table-striped mt-3">
+              <thead class="table-dark">
+                <th>Id</th>
+                <th>Ip</th>
+                <th>Procesador</th>
+                <th>Sistema Operativo</th>
+                <th>Tipo de Equipo</th>
+                <th>Fecha de instalacion</th>
+                <th>Opciones</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for key,value in devices.items %}
+                  {% for val in value %}
+                    <tr>
+                      <td> {{ val.id_device                }}</td>
+                      <td> {{ val.ip_from                  }}</td>
+                      <td> {{ val.id_cpu.cpu_name          }}</td>
+                      <td> {{ val.id_os.os_name            }}</td>
+                      <td> {{ val.id_device_type.type_name }}</td>
+                      <td> {{ val.date_created             }}</td>
+                      <td>
+                        <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+<!-- ############################# OLD INTERFACE ################################## -->
+
+<div class="container">
+  <ul class="tab-container">
+
+    <!-- TAB INFORMACION PERSONA -->
+    <li>
+      <input type="radio" id="tab-0" name="tab" checked/>
+      <label for="tab-0">Información</label>
+        <div class="tab-content">
+            <div class="inner">
+                <div class="inner-left">
+            
+                    <div class="contenedor">
+                        <div class="contenedor_form" style="padding-top: 100px;">
+
+                            <form action="{% url 'update_persona' persona.email_people %}" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                <input type="text" value = "{{persona.name_people}}"name = "name" class="form-control" placeholder="Nombre">
+                                </div>
+                    
+                                <div class="mb-3">
+                                <input type="email" value = "{{persona.email_people}}"name = "email" class="form-control" placeholder="Correo electronico">
+                                </div>
+                    
+                                <div class="mb-3">
+                                <select class="form-select" name = "org" aria-label="Site" >
+                                    {% for o in orgs %}
+                                        {% if o.id_org == org_ %}
+                                        <option selected value="{{o.id_org}}">{{o.org_name}}</option>
+                                        {% else %}
+                                        <option value="{{o.id_org}}">{{o.org_name}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class = "contenedor_b">
+                                    <button class="btn">Actualizar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <!-- TAB PERMISOS -->
+    <li>
+        <input type="radio" id="tab-1" name="tab"  />
+        <label for="tab-1">Permisos</label>
+        <div class="tab-content">
+            <div class="inner">
+                <div class="inner-left">
+
+
+                                        <!-- TITULO -->
+                    <div class="title1">
+                        <h3>Permisos de {{namep}}</h3>
+                    </div>
+
+                    <!-- TABLA DE ITEMS -->
+
+                    <div class="overflow-auto ">
+                        <div style="height: 320px; width: 950px; overflow-x: hidden;">
+
+                        <table class="table" style="background-color: white; ">
+                        <thead>
+                            <tr>
+                            <th style="text-align: left;">Id Permiso</th>
+                            <th style="text-align: left">Organización</th>
+                            <th style="text-align: left;">Sitio</th>
+                            <th style="text-align: center;">Zona</th>
+                            <th style="text-align: center;">Id device</th>
+                            <th style="text-align: center;">Nivel de Acceso</th>
+                            <th style="text-align: center;">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for permiso in permisos %}
+                            <tr>
+                            <th scope="row" style="text-align: left;">{{ permiso.id_permission }}</th>
+                            <td align="left">{{ permiso.id_org }}</td>
+                            <td align="left">{{ permiso.id_site }}</td>
+                            <td align="left">{{ permiso.id_zone }}</td>
+                            <td align="left">{{ permiso.id_dev }}</td>
+                            <td align="center">{{ permiso.level }}</td>
+                            <td align="center">
+                                <div style = " display: inline-block;"> 
+                                    <form action = "{% url 'modificar_permiso' email permiso.id_permission %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-primary">Modificar</button>
+                                    </form> 
+                                </div>
+                                <div style = " display: inline-block;">
+                                    <form action = "{% url 'eliminar_permiso' email permiso.id_permission %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td> 
+                            </tr>         
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                    <!-- BOTON AGREGAR  -->
+                    <div class = "boton">
+                        <form action = "{% url 'formulario_permisos' email %}" method = "POST">
+                        {% csrf_token %}
+                        <button class="btn" >Nuevo permiso</button>
+                        <form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>  
+    </li>
+
+    <!-- TABS PASWWORDS -->
+    <li>
+        <input type="radio" id="tab-2" name="tab" />
+        <label for="tab-2">Equipos</label>
+
+        <div class="tab-content">
+          <div class="inner">
+            <div class="inner-left">
+              
+              <div class = "contenedor_b">
+                <div class="input-group mb-3" style="height: 40px; width: 500px;">
+                    <input type="text" class="form-control" placeholder="Nombre del sitio" >
+                    <button class="btn" type="button">Buscar</button>
+                </div>
+              </div>
+
+              <div style="height: 30px; width: 950px; padding-bottom: 39px;">
+                <table class="table" style="background-color:white; border-bottom: 1px solid; ">
+                  <thead>
+                    <tr>
+                      <th style="text-align: left;">Id</th>
+                      <th style="text-align: center; ">Ip</th>
+                      <th style="text-align: center; ">Procesador</th>
+                      <th style="text-align: center; ">Sistema Operativo</th>
+                      <th style="text-align: center; ">Tipo de Equipo</th>
+                      <th style="text-align: center; ">Fecha de instalacion</th>
+                      
+                      <th style="text-align: center; ">Opciones</th>
+                    </tr>
+                  </thead>
+                  </table>
+                  </div>
+              
+              <div class="overflow-auto">
+                <div style="height: 360px; width: 950px; overflow-x: hidden;">
+                <table class="table" style="background-color: white; ">
+                  <thead>
+                    <tr>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    {% for key,value in devices.items %}
+                      {% for val in value %}
+                    <tr>
+                      <th scope="row" style="text-align: center;">{{val.id_device}}</th>
+                      <td align="center">{{val.ip_from}}</td>
+                      <td align="center">{{val.id_cpu.cpu_name}}</td>
+                      <td align="center">{{val.id_os.os_name}}</td>
+                      <td align="center">{{val.id_device_type.type_name}}</td>
+                      <td align="center">{{val.date_created}}</td>
+                      <td align="center">
+                        
+                        <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                      </td>
+                    </tr>         
+                    {% endfor %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              
+            </div>
+          </div>
+        </div>
+    </li>
+  </ul>
+</div>

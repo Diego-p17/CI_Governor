@@ -1,0 +1,29 @@
+
+/* GLOBAL */
+.mw-50{
+    max-width: 50%;
+}
+.mw-75{
+    max-width: 75%;
+}
+.mw-85{
+    max-width: 85%;
+}
+.mw-100{
+    max-width: 100%;
+}
+
+/* Forms */
+.contenedor{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.container_sm{
+    margin: 20px auto;
+    border:  2px solid #ece8e8;
+    border-radius: 20px;
+    padding: 20px;
+    padding: 25px;
+}

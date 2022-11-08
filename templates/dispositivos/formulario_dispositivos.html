@@ -1,0 +1,128 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+  <main class="container_sm shadow p-3 m-3 bg-body rounded">
+    <div>
+      <h2 class="text-center">Agregar dispositivo</h2>
+    </div>
+    <!-- form permission -->
+    <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+      <div class="card-body mx-auto " >
+        <form action="{% url 'agregar_dispositivo' %}" method="POST">
+          {% csrf_token %}
+          <!-- IP -->
+          <div class="form-outline mb-2">
+            <input type="text" name = "ip" class="form-control" placeholder=" 000.000.00.000">
+            <label class="form-label" for="">Ip</label>
+          </div>
+          <!-- DATE -->
+          <div class="form-outline mb-2">
+            <input type="date" name = "fecha" class="form-control" placeholder="">
+            <label class="form-label" for="">Fecha</label>
+          </div>
+          <!-- type device -->
+          <div class="form-outline mb-2">
+            <select class="form-select" name="type" aria-label="Organización">
+              <option selected value="default">Seleccione un tipo</option>
+              {% for t in types %}
+              <option value="{{t.id_device_type }}">{{t.type_name }}</option>
+              {% endfor %}
+            </select>
+            <label class="form-label" for="">Tipo de dispositivo</label>
+          </div>
+          <!-- CPU -->
+          <div class="form-outline mb-2">
+            <select class="form-select" name = "cpu" aria-label="Site" >
+              <option selected value="default">Seleccione un procesador</option>
+              {% for cpu in cpus %}
+              <option value="{{cpu.id_cpu }}">{{cpu.cpu_name}}</option>
+              {% endfor %}
+            </select>
+            <label class="form-label" for="">CPU</label>
+          </div>
+          <!-- Operative System -->
+          <div class="form-outline mb-2">
+            <select class="form-select" name = "os" aria-label="Site" >
+              <option selected value="default">Seleccione un sistema operativo</option>
+              {% for o in os %}
+                <option value="{{o.id_os}}">{{o.os_name}}</option>
+              {% endfor %}
+              </select>
+            <label class="form-label" for="">Sistema Operativo</label>
+          </div>
+          <!-- ZONE -->
+          <div class="form-outline mb-2">
+            <select class="form-select" name = "zone" aria-label="Site" >
+              <option selected value="default">Seleccione una zona</option>
+              {% for zone in zones %}
+                <option value="{{zone.id_zone}}">{{zone.zone_name}}</option>
+              {% endfor %}
+            </select>
+            <label class="form-label" for="">Zona</label>
+          </div>
+          <!-- Actualizar btn -->
+          <div class="d-block mt-3">
+            <button class="btn btn-primary w-100";">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+<!-- ############################OLD INTERFACE ######################################################## -->
+<div class="contenedor">
+    <div class="contenedor_form">
+        <h4>Agregar información nueva persona: </h4>
+        <form action="{% url 'agregar_dispositivo' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <input type="text" name = "ip" class="form-control" placeholder="Ip">
+            </div>
+
+            <div class="mb-3">
+              <input type="date" name = "fecha" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <select class="form-select" name = "type" aria-label="Site" >
+                  <option selected value="default">Seleccione un tipo</option>
+                  {% for t in types %}
+                  <option value="{{t.id_device_type }}">{{t.type_name }}</option>
+                  {% endfor %}
+                  </select>
+            </div>
+
+            <div class="mb-3">
+              <select class="form-select" name = "cpu" aria-label="Site" >
+                  <option selected value="default">Seleccione un procesador</option>
+                  {% for cpu in cpus %}
+                  <option value="{{cpu.id_cpu }}">{{cpu.cpu_name}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+              <select class="form-select" name = "os" aria-label="Site" >
+                  <option selected value="default">Seleccione un sistema operativo</option>
+                  {% for o in os %}
+                  <option value="{{o.id_os}}">{{o.os_name}}</option>
+                  {% endfor %}
+                  </select>
+            </div>
+
+            <div class="mb-3">
+              <select class="form-select" name = "zone" aria-label="Site" >
+                  <option selected value="default">Seleccione una zona</option>
+                  {% for zone in zones %}
+                  <option value="{{zone.id_zone}}">{{zone.zone_name}}</option>
+                  {% endfor %}
+                  </select>
+            </div>
+            
+            <div class = "boton_agregar">
+                <button class="btn">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+ <!-- TABLA DE ITEMS -->
+
+ <div class = "container"> 
+
+  <table class="table" style="background-color: white; ">
+    <thead>
+      <tr>
+        
+        <th style="text-align: left;">Id Permiso</th>
+        <th style="text-align: left">Organización</th>
+        <th style="text-align: left;">Sitio</th>
+        <th style="text-align: center;">Zona</th>
+        <th style="text-align: center;">Id device</th>
+        <th style="text-align: center;">Nivel de Acceso</th>
+        <th style="text-align: center;">Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for permiso in permisos %}
+      <tr>
+        <th scope="row" style="text-align: left;">{{ permiso.id_permission }}</th>
+        <td align="left">{{ permiso.id_org }}</td>
+        <td align="left">{{ permiso.id_site }}</td>
+        <td align="left">{{ permiso.id_zone }}</td>
+        <td align="left">{{ permiso.id_dev }}</td>
+        <td align="center">{{ permiso.level }}</td>
+        <td align="center">
+          <div style = " display: inline-block;"> 
+          <form action = "{% url 'modificar_permiso' email permiso.id_permission %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-outline-primary">Modificar</button>
+          </form> 
+        </div>
+        <div style = " display: inline-block;">
+          <form action = "{% url 'eliminar_permiso' email permiso.id_permission %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger">Eliminar</button>
+          </form>
+        </div>
+
+        </td> 
+      </tr>         
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+
+<!-- BOTON AGREGAR  -->
+<div class = "boton">
+  <form action = "{% url 'formulario_permisos' email %}" method = "POST">
+    {% csrf_token %}
+    <button class="btn" >Nuevo permiso</button>
+  <form>
+</div>
+
+</body>
+</html>
+
+{% endblock %}
+    <!-- TITULO -->
+    <div class="title1">
+        <h3>Permisos de {{persona}}</h3>
+    </div>
+
+      <!-- TABLA DE ITEMS -->
+
+      <div class = "container"> 
+
+        <table class="table" style="background-color: white; ">
+          <thead>
+            <tr>
+              
+              <th style="text-align: left;">Id Permiso</th>
+              <th style="text-align: left">Organización</th>
+              <th style="text-align: left;">Sitio</th>
+              <th style="text-align: center;">Zona</th>
+              <th style="text-align: center;">Id device</th>
+              <th style="text-align: center;">Nivel de Acceso</th>
+              <th style="text-align: center;">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for permiso in permisos %}
+            <tr>
+              <th scope="row" style="text-align: left;">{{ permiso.id_permission }}</th>
+              <td align="left">{{ permiso.id_org }}</td>
+              <td align="left">{{ permiso.id_site }}</td>
+              <td align="left">{{ permiso.id_zone }}</td>
+              <td align="left">{{ permiso.id_dev }}</td>
+              <td align="center">{{ permiso.level }}</td>
+              <td align="center">
+                <div style = " display: inline-block;"> 
+                <form action = "{% url 'modificar_permiso' email permiso.id_permission %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-primary">Modificar</button>
+                </form> 
+              </div>
+              <div style = " display: inline-block;">
+                <form action = "{% url 'eliminar_permiso' email permiso.id_permission %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-danger">Eliminar</button>
+                </form>
+              </div>
+
+              </td> 
+            </tr>         
+            {% endfor %}
+          </tbody>
+        </table>
+    
+      </div>
+
+
+    <!-- BOTON AGREGAR  -->
+      <div class = "boton">
+        <form action = "{% url 'formulario_permisos' email %}" method = "POST">
+          {% csrf_token %}
+          <button class="btn" >Nuevo permiso</button>
+        <form>
+      </div>
+
+</body>
+</html>

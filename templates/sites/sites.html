@@ -1,0 +1,108 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+  <div class="container_sm shadow p-5 mb-5 bg-body rounded">
+    <!-- tittle -->
+    <div class="row">
+      <div class="col">
+        <h2>Sitios</h2>
+      </div>
+    </div>
+    <!-- Table -->
+    <div class="table-responsive p-5">
+      <table id="dataTable" class="dataTable table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Pais</th>
+            <th>Ciudad</th>
+            <th>Dirección</th>
+            <th class="text-center">Opciones</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          {% for site in sites  %}
+            <tr>
+              <td>{{site.idSite       }}</td>
+              <td>{{ site.nameSite    }}</td>
+              <td>{{ site.countrySite }}</td>
+              <td>{{ site.citySite    }}</td>
+              <td>{{ site.addressSite }}</td>
+              <td class="text-center">
+                  <a href="{% url 'site_info' site.idSite %}"><button class="btn btn-success">Consultar</button></a>
+                  <a href=""><button class="btn btn-danger" >Eliminar</button></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <a href="{% url 'form_site' %}"><button class="btn btn-success" >Agregar</button></a>
+  </div>
+{% endblock %}
+
+<!-- ###################################### OLD INTERFACE ################################################### -->
+<div>
+    <!-- TITULO -->
+    <div class="title1">
+      <h3>Sitios</h3>
+  </div>
+
+
+  <!-- CAMPO DE BUSQUEDA -->
+  <form action="{% url 'buscar_sitio' %}" method="POST">
+    {% csrf_token %}
+    <div class = "contenedor_b">
+        <div class="input-group mb-3">
+            <input type="text"name="buscar_site" class="form-control" placeholder="Nombre del sitio" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn">Buscar</button>
+        </div>
+    </div>
+  </form>
+
+    <!-- TABLA DE ITEMS -->
+  <div class="container">
+      <table class="table" style="background-color: white; ">
+        <thead>
+          <tr>
+            <th style="text-align: left;">Id</th>
+            <th style="text-align: left;">Nombre</th>
+            <th style="text-align: left;">Pais</th>
+            <th style="text-align: left;">Ciudad</th>
+            <th style="text-align: left;">Dirección</th>
+            <th style="text-align: center;">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for site in sites  %}
+          <tr>
+            <th scope="row" style="text-align: left;">{{site.id_site}}</th>
+            <td align="left">{{ site.site_name }}</td>
+            <td align="left">{{site.country}}</td>
+            <td align="left">{{site.city}}</td>
+            <td align="left">{{site.address}}</td>
+
+              <form action = "{% url 'tabs_sitios' site.id_site %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary">Consultar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  <!-- BOTON AGREGAR  -->
+  <div class = "boton">
+    <form action = "{% url 'form_site' %}" method = "POST">
+      {% csrf_token %}
+      <button class="btn" >Agregar</button>
+    <form>
+   </div>
+
+
+
+</div>

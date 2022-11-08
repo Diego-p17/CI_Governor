@@ -1,0 +1,185 @@
+{% extends '../layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+  <main class="container_sm shadow p-3 m-3 bg-body rounded">
+    <div>
+      <h2 class="text-center">Actualizar permiso</h2>
+    </div>
+    <!-- form permission -->
+    <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+      <div class="card-body mx-auto " >
+        <form action="{% url 'guardar_modificar_permiso' email id_permiso  %}" method="POST">
+          {% csrf_token %}
+          <!-- Organizacion -->
+          <div class="form-outline">
+            <select class="form-select" name="org" aria-label="Organización">
+              <option value="0">organización</option>
+              {% for o in orgs %}
+                {% if o.id_org == org.id_org %}
+                  <option selected value="{{o.id_org}}">{{o.org_name}}</option>
+                  {% else %}
+                  <option value="{{o.id_org}}">{{o.org_name}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <label class="form-label" for="">organización</label>
+          </div>
+          <!-- Sitio -->
+          <div class="form-outline">
+            <select class="form-select" name = "org" aria-label="Site" >
+              <option selected value="0">Sitio</option>
+              {% for o in sites %}
+                {% if o.id_site == site.id_site %}
+                  <option selected value="{{o.id_site}}">{{o.site_name}}</option>
+                {% else %}
+                  <option value="{{o.id_site}}">{{o.site_name}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <label class="form-label" for="">Sitio</label>
+          </div>
+          <!-- Zona -->
+          <div class="form-outline">
+            <select class="form-select" name = "org" aria-label="Site" >
+              <option selected value="0">Zona</option>
+              {% for o in zones %}
+                {% if o.id_zone == zone.id_zone %}
+                  <option selected value="{{o.id_zone}}">{{o.zone_name}}</option>
+                {% else %}
+                  <option value="{{o.id_zone}}">{{o.zone_name}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <label class="form-label" for="">Zona</label>
+          </div>
+          <!-- permisos -->
+          <div class="form-outline">
+            <div class="card">
+              <div class="card-header">
+                <a class="btn" data-bs-toggle="collapse" href="#collapse">
+                  Permisos <i class="bi bi-chevron-down"></i>
+                </a>
+              </div>
+              <div id="collapse" class="collapse" data-bs-parent="#accordion">
+                <div class="card-body">
+                  <div class="form-check form-switch">
+                    {% if var == 1 %}
+                    <input checked class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value="1">
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value="1">
+                    {% endif %}
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Visualizar</label>
+                  </div>
+                  <div class="form-check form-switch">
+                    {% if var == 2 %}
+                    <input checked class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value="2">
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value="2">
+                    {% endif %}
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Modificar</label>
+                  </div>
+                  <div class="form-check form-switch">
+                    {% if var == 3 %}
+                    <input checked class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value="3">
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value="3">
+                    {% endif %}
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Eliminar</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Actualizar btn -->
+          <div class="d-block mt-3">
+            <button class="btn btn-primary w-100";">Actualizar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+    <!-- FORMULARIO SITIOS-->
+<div class="contenedor" style="margin-bottom: 30px;">
+
+    <div class="contenedor_form">
+        <h4>Asignar permiso </h4>
+        <form action="{% url 'guardar_modificar_permiso' email id_permiso  %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <select class="form-select" name = "org" aria-label="Site" >
+                <option value="0">organización</option>
+                  {% for o in orgs %}
+                    {% if o.id_org == org.id_org %}
+                      <option selected value="{{o.id_org}}">{{o.org_name}}</option>
+                      {% else %}
+                      <option value="{{o.id_org}}">{{o.org_name}}</option>
+                    {% endif %}
+                  {% endfor %}
+              </select>
+            </div>
+
+          <div class="mb-3">
+            <select class="form-select" name = "site" aria-label="Site" >
+                <option selected value="0">Sitio</option>
+                {% for o in sites %}
+                  {% if o.id_site == site.id_site %}
+                    <option selected value="{{o.id_site}}">{{o.site_name}}</option>
+                  {% else %}
+                    <option value="{{o.id_site}}">{{o.site_name}}</option>
+                  {% endif %}
+                {% endfor %}
+                </select>
+          </div>
+
+          <div class="mb-3">
+            <select class="form-select" name = "zone" aria-label="Site" >
+                <option selected value="0">Zona</option>
+                {% for o in zones %}
+                  {% if o.id_zone == zone.id_zone %}
+                    <option selected value="{{o.id_zone}}">{{o.zone_name}}</option>
+                  {% else %}
+                    <option value="{{o.id_zone}}">{{o.zone_name}}</option>
+                  {% endif %}
+                {% endfor %}
+                </select>
+          </div>
+
+            <div class = container style = "width: 200px;">
+            <div class="input-group-text" style = "background-color: white; ">
+              {% if var == 1 %}
+                <input checked name="permiso" type="radio" style="margin: 10px;" value=1>
+              {% else %}
+                <input name="permiso" type="radio" style="margin: 10px;" value=1>
+              {% endif %}
+              <label style="margin: 10px;"> Visualizar</label>
+            </div>
+
+            <div class="input-group-text" style = "background-color: white;">
+              {% if var == 2 %}
+                <input checked name="permiso" type="radio" style="margin: 10px;" value=2>
+                {% else %}
+                <input name="permiso" type="radio" style="margin: 10px;" value=2>
+              {% endif %}
+              <label style="margin: 10px;"> Modificar</label>
+            </div>
+
+            <div class="input-group-text" style = "background-color: white;">
+              {% if var == 3 %}
+                <input checked name="permiso" type="radio" style="margin: 10px;" value=3>
+                {% else %}
+                <input name="permiso" type="radio" style="margin: 10px;" value=3>
+              {% endif %}
+              <label style="margin: 10px;"> Eliminar</label>
+            </div>
+
+            
+              <div class = "boton_agregar" style="margin-top: 20px;">
+                <button class="btn">Guardar</button>
+              </div>
+          </div>
+        </form>
+    </div>
+</div>
+

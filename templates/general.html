@@ -1,0 +1,749 @@
+{% extends 'layouts/base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container-sm">
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Lugares</a>
+        <ul class="dropdown-menu">
+            <li><a class="nav-link" data-bs-toggle="tab" href="#country">Paises</a></li>
+            <li><a class="nav-link" data-bs-toggle="tab" href="#city">Ciudades</a></li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Dispositivos</a>
+        <ul class="dropdown-menu">
+            <li><a class="nav-link" data-bs-toggle="tab" href="#os">Sis. operativo</a></li>
+            <li><a class="nav-link" data-bs-toggle="tab" href="#platform">Plataforma</a></li>
+            <li><a class="nav-link" data-bs-toggle="tab" href="#deviceType">Tipo de dispositivo</a></li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Autenticacion</a>
+        <ul class="dropdown-menu">
+            <li><a class="nav-link" data-bs-toggle="tab" href="#tokenType">Tipo token</a></li>
+            <li><a class="nav-link" data-bs-toggle="tab" href="#settingsType">tipo Settings</a></li>
+        </ul>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <!-- places -->
+    <div id="country" class="container tab-pane active"><br>
+      <h3>Paises</h3>
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Pais</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for country in countries %}
+              <tr>
+                <td> {{ country.id_Country  }} </td>
+                <td> {{ country.nameCountry }} </td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline mr-4">
+                      <a href="{% url 'deleteCountry' country.id_Country %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_device  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#update{{country.id_Country }}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_device -->
+                      <div class="modal fade" id="update{{country.id_Country }}" tabindex="-1" aria-labelledby="updateCountry" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{{country.id_Country }}">Actualizar Pais</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updateCountry' country.id_Country  %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name Country -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-globe"></i></span>
+                                        <input type="text" name = "nameCountry" class="form-control" placeholder="Nombre Pais" value="{{country.nameCountry}}">
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+            <!-- Button modal add_device  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCountryModal">
+        Agregar
+      </button>
+
+      <!-- Modal add_device -->
+      <div class="modal fade" id="addCountryModal" tabindex="-1" aria-labelledby="addDeviceModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Agregar Pais</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addCountry' %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name Country -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-globe"></i></span>
+                        <input type="text" name="nameCountry" class="form-control" placeholder="Name Country" aria-label="Name Country" aria-describedby="nameCountry" required>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="city" class="container tab-pane"><br>
+      <h3>Ciudades</h3>
+      <!-- Table -->
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>ciudad</th>
+              <th>Pais</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for city in citys %}
+              <tr>
+                <td> {{ city.id_City }} </td>
+                <td> {{ city.nameCity }} </td>
+                <td> {{ city.id_Country }} </td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline mr-4">
+                      <a href="{% url 'deleteCity' city.id_City  %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_device  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#update{{city.id_City}}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_device -->
+                      <div class="modal fade" id="update{{city.id_City}}" tabindex="-1" aria-labelledby="updateCountry" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{{city.id_City}}">Actualizar Ciudad</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updateCity' city.id_City %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name Country -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-globe"></i></span>
+                                        <input type="text" name="nameCity" value="{{city.nameCity}}" class="form-control" placeholder="Nombre City" aria-label="Name Country" aria-describedby="nameCountry" required>
+                                       <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="idCountry">
+                                          {% for country in countries %}
+                                            {% if country.id_Country == city.id_Country %}
+                                              <option value= "{{country.id_Country}}" selected>{{country.nameCountry}}</option>
+                                            {% endif %}
+                                            <option value="{{country.id_Country}}">{{country.nameCountry}}</option>
+                                          {% endfor %}
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+            <!-- Button modal add_device  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCityModal">
+        Agregar
+      </button>
+
+      <!-- Modal add_device -->
+      <div class="modal fade" id="addCityModal" tabindex="-1" aria-labelledby="addCityModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Agregar Ciudad</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addCity'  %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name city -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-globe"></i></span>
+                        <input type="text" name="nameCity" class="form-control" placeholder="Nombre City" aria-label="Name Country" aria-describedby="nameCountry" required>
+                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="idCountry">
+                          <option value= "0" selected>Seleccionar pais</option>
+                          {% for country in countries %}
+                            <option value="{{country.id_Country}}">{{country.nameCountry}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- devices -->
+    <div id="os" class="container tab-pane fade"><br>
+      <h3>Sistema Operativo</h3>
+      <!-- Table -->
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>sistema</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for os in operativeSys %}
+              <tr>
+                <td> {{ os.id_Os  }}</td>
+                <td> {{ os.nameOs }}</td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline">
+                      <a href="{% url 'deleteOs' os.id_Os %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_device  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateOs{{os.id_Os}}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_device -->
+                      <div class="modal fade" id="updateOs{{os.id_Os}}" tabindex="-1" aria-labelledby="updateOs" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{{os.id_Os}}">Actualizar Sistema</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updateOs' os.id_Os %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name os -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                                        <input type="text" name="nameOs" value="{{os.nameOs}}" class="form-control" placeholder="Nombre City" aria-label="Name Country" aria-describedby="nameCountry" required>
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Button modal add_device  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOsModal">
+        Agregar
+      </button>
+      <!-- Modal add_device -->
+      <div class="modal fade" id="addOsModal" tabindex="-1" aria-labelledby="addCityModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Agregar Sistema</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addOs'  %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name Os -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                        <input type="text" name="nameOs" class="form-control" placeholder="Nombre Sistema Operativo" aria-label="Name Country" aria-describedby="nameCountry" required>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="platform" class="container tab-pane fade"><br>
+      <h3>Plataforma</h3>
+      <!-- Table -->
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>sistema</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for platform in Platforms %}
+              <tr>
+                <td> {{ platform.id_HwPlatform  }}</td>
+                <td> {{ platform.nameHwPlatform }}</td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline">
+                      <a href="{% url 'deletePlatform' platform.id_HwPlatform %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_device  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateOs{{platform.id_HwPlatform}}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_device -->
+                      <div class="modal fade" id="updateOs{{platform.id_HwPlatform}}" tabindex="-1" aria-labelledby="updateOs" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{{platform.id_HwPlatform}}">Actualizar Plataforma</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updatePlatform' platform.id_HwPlatform %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name Platform -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                                        <input type="text" name="namePlatform" value="{{platform.nameHwPlatform}}" class="form-control" placeholder="Nombre Plataforma" aria-label="Name platform" aria-describedby="namePlatform" required>
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Button modal add_PLatform  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPlatformModal">
+        Agregar
+      </button>
+      <!-- Modal add_Platform -->
+      <div class="modal fade" id="addPlatformModal" tabindex="-1" aria-labelledby="addCityModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Agregar Plataforma</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addPlatform'  %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name Platform -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                        <input type="text" name="namePlatform" class="form-control" placeholder="Nombre Sistema Operativo" aria-label="Name Country" aria-describedby="nameCountry" required>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="deviceType" class="container tab-pane fade"><br>
+      <h3>Tipo de Dispositivo</h3>
+      <!-- Table -->
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Tipo Dispositivo</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for deviceType in deviceTypes %}
+              <tr>
+                <td> {{ deviceType.id_DeviceType  }}</td>
+                <td> {{ deviceType.nameDeviceType }}</td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline">
+                      <a href="{% url 'deleteDeviceType' deviceType.id_DeviceType %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_device  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateDevicetype{{deviceType.id_DeviceType}}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_device -->
+                      <div class="modal fade" id="updateDevicetype{{deviceType.id_DeviceType}}" tabindex="-1" aria-labelledby="updateDeviceType" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{{deviceType.id_DeviceType}}">Actualizar Tipo Dispositivo</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updateDeviceType' deviceType.id_DeviceType %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name deviceType -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                                        <input type="text" name="nameDeviceType" value="{{deviceType.nameDeviceType}}" class="form-control" placeholder="Tipo Dispositivo" aria-label="typeDevice" aria-describedby="typeDevice" required>
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Button modal add_device  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDeviceTypeModal">
+        Agregar
+      </button>
+      <!-- Modal add_device -->
+      <div class="modal fade" id="addDeviceTypeModal" tabindex="-1" aria-labelledby="addDeviceTypeModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addDeviceTypeModal">Agregar Sistema</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addDeviceType'  %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name deviceType -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-display"></i></span>
+                        <input type="text" name="nameDeviceType" class="form-control" placeholder="Tipo Dispositivo" aria-label="Name Country" aria-describedby="nameCountry" required>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Autentication -->
+    <div id="tokenType" class="container tab-pane fade"><br>
+      <h3>Tipo de token</h3>
+      <!-- Table -->
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Tipo Token</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tokenType in tokenTypes %}
+              <tr>
+                <td> {{ tokenType.id_TokenType  }}</td>
+                <td> {{ tokenType.nameTokenType }}</td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline">
+                      <a href="{% url 'deleteTokenType' tokenType.id_TokenType %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_device  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateTokentype{{tokenType.id_TokenType }}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_device -->
+                      <div class="modal fade" id="updateTokentype{{tokenType.id_TokenType }}" tabindex="-1" aria-labelledby="updateTokenType" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{tokenType.id_TokenType }}">Actualizar Tipo Token</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updateTokenType' tokenType.id_TokenType  %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name deviceType -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                                        <input type="text" name="nameTokenType" value="{{tokenType.nameTokenType }}" class="form-control" placeholder="Tipo Token" aria-label="typeDevice" aria-describedby="typeDevice" required>
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Button modal add_token  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTokenTypeModal">
+        Agregar
+      </button>
+      <!-- Modal add_device -->
+      <div class="modal fade" id="addTokenTypeModal" tabindex="-1" aria-labelledby="addTokenTypeModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addTokenTypeModal">Agregar Tipo Token</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addTokenType'  %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name deviceType -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-display"></i></span>
+                        <input type="text" name="nameTokenType" class="form-control" placeholder="Tipo token" aria-label="Name token" aria-describedby="nameToken" required>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="settingsType" class="container tab-pane fade"><br>
+      <h3>Tipo de settings</h3>
+      <!-- Table -->
+      <div class="table-responsive">
+        <table id="dataTable" class="dataTable table table-striped mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Tipo Settings</th>
+              <th class="text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for settingsType in settingsTypes %}
+              <tr>
+                <td> {{ settingsType.id_SettingsType  }}</td>
+                <td> {{ settingsType.nameSettingsType }}</td>
+                <td class="d-flex justify-content-center gap-3 ">
+                    <div class="d-inline">
+                      <a href="{% url 'deleteSettingsType' settingsType.id_SettingsType %}"><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></a>
+                    </div>
+                    <div class="d-inline">
+                      <!-- Button modal add_settings  -->
+                      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateSettingstype{{settingsType.id_SettingsType}}"><i class="bi bi-arrow-repeat"></i></button>
+                      <!-- Modal add_settings -->
+                      <div class="modal fade" id="updateSettingstype{{settingsType.id_SettingsType }}" tabindex="-1" aria-labelledby="updateTokenType" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="update{tokenType.id_TokenType }}">Actualizar Tipo Settings</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                                <div class="card-body mx-auto " >
+                                  <form action="{% url 'updateSettingsType' settingsType.id_SettingsType  %}" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Name deviceType -->
+                                    <div class="form-outline mb-4">
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-cpu"></i></span>
+                                        <input type="text" name="nameSettingsType" value="{{settingsType.nameSettingsType }}" class="form-control" placeholder="Tipo settings" aria-label="typeDevice" aria-describedby="typeDevice" required>
+                                      </div>
+                                    </div>
+                                    <!-- Actualizar btn -->
+                                    <div class="d-block mt-3">
+                                      <button class="btn btn-primary w-100";">Actualizar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Button modal add_device  -->
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSettingsTypeModal">
+        Agregar
+      </button>
+      <!-- Modal add_device -->
+      <div class="modal fade" id="addSettingsTypeModal" tabindex="-1" aria-labelledby="addTokenTypeModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addSettingsTypeModal">Agregar Tipo Settings</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container_sm shadow p-2 mb-5 bg-body rounded" style="max-width: 600px"  >
+                <div class="card-body mx-auto " >
+                  <form action="{% url 'addSettingsType'  %}" method="POST">
+                    {% csrf_token %}
+                    <!-- Name deviceType -->
+                    <div class="form-outline mb-4">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-display"></i></span>
+                        <input type="text" name="nameSettingsType" class="form-control" placeholder="Tipo Settings" aria-label="Name Settings" aria-describedby="nameSettings" required>
+                      </div>
+                    </div>
+                    <!-- Actualizar btn -->
+                    <div class="d-block mt-3">
+                      <button class="btn btn-primary w-100";">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock%}
