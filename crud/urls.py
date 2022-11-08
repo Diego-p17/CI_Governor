@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
 
 
-    # -- Genreral -- #
+    # -- General -- #
     path('general/', views.get_general, name= "general"),
     # Country
     path('general/addCountry', views.addCountry, name= "addCountry"),
@@ -39,8 +39,7 @@ urlpatterns = [
     # Organizations #
     #################
     path('', views.get_allOrganizations, name= "home"),
-    path('organization/<int:idOrg>/', views.get_organization, name = "organization"),
-    path('form_organization/', views.form_addOrganization, name = "form_addOrganization"),
+    path('organization/<int:id_Org>/', views.get_organization, name = "organization"),
     path('add_organization/', views.add_organization, name = "add_organization"),
     path('update_organization/<int:idOrg>', views.update_organization, name = "update_organization"),
 

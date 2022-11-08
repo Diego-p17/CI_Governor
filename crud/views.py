@@ -384,33 +384,41 @@ def updateSettingsType(request, id_SettingsType):
 
 #Show all organizations
 def get_allOrganizations(request):
-    organizations = models.Organizations.objects.all().values_list(named=True).exclude(nameOrganization = "sin organizacion")
-    context       = {"organizations": organizations}
+    organizations = models.TbOrganization.objects.all().exclude(nameOrganization = "sin organizacion")
+    citys         = models.TbCity.objects.all()
+    countries     = models.TbCountry.objects.all()
+    context       = {
+                     "organizations": organizations,
+                     "citys"        : citys,
+                     "countries"    : countries
+                    }
     return render(request, 'organizations/organizations.html', context)
 
 #show all data the organization
 def get_organization(request, idOrg):
 
-    organization = models.Organizations.objects.filter(idOrganization = idOrg).values()
+    organization   = models.TbOrganization.objects.filter(id_Organization = idOrg).values()
     idOrganization = organization[0]['idOrganization']
-    peoplesOrg   = models.Peoples.objects.filter(organizations_idOrganization_id = idOrg).values()
-    sitesOrg   = models.Sites.objects.filter(organizations_idOrganization_id = idOrg).values()
+    peoplesOrg     = models.TbPeople.objects.filter(id_Organization = idOrg).values()
+    sitesOrg       = models.TbSite.objects.filter(id_Organization = idOrg).values()
 
 
     #verify people with  emptyOrganization
-    emptyOrg     = models.Organizations.objects.filter(nameOrganization = 'sin organizacion').values('idOrganization')
+    emptyOrg     = models.TbOrganization.objects.filter(nameOrganization = 'sin organizacion').values('idOrganization')
     idEmptyOrg   = emptyOrg[0]['idOrganization']
-    peoples      = models.Peoples.objects.filter(organizations_idOrganization_id = idEmptyOrg).values('idPeople','firstNamePeople', 'firstLastNamePeople','organizations_idOrganization_id')
-    sites        = models.Sites.objects.filter(organizations_idOrganization_id = idEmptyOrg).values('idSite', 'nameSite','organizations_idOrganization_id')
+    peoples      = models.TbPeople.objects.filter(id_Organization = idEmptyOrg).values('id_People','namePeople','id_Organization')
+    sites        = models.TbSite.objects.filter(organizations_idOrganization_id = idEmptyOrg).values('id_Site', 'nameSite','id_Organization')
 
     devices = []
     for site in sites:
         id_site = site.get('idSite')
-        zones = models.Zones.objects.filter(sites_idSite_id = id_site).values()
+        zones = models.TbZone.objects.filter(id_Site = id_site).values()
         for zone in zones:
             id_zone = zone.get('idZone')
-            device = models.Devices.objects.filter(zones_idZone_id = id_zone).values()
+            device = models.TbDevice.objects.filter(id_Zone = id_zone).values()
             devices.append(device)
+
+
 
     context = {
                "idOrganization": idOrganization,
@@ -424,25 +432,30 @@ def get_organization(request, idOrg):
 
     return render(request, 'organizations/organization_info.html', context)
 
-# View form add organization
-def form_addOrganization(request):
-    return render(request, 'organizations/form_organization.html',)
-
 # Add new Organization
 def add_organization(request):
-    # Datos del formulario Organizaciones
-    name    = request.POST['nameOrg']
-    taxId   = request.POST['taxIdOrg']
-    country = request.POST['countryOrg']
-    city    = request.POST['cityOrg']
-    address = request.POST['addressOrg']
-    postal  = request.POST['postalOrg']
 
-    #inserta nueva organizacion en la base de datos
-    new_organization = models.Organizations(nameOrganization = name, taxIdOrganization = taxId, countryOrganization = country, cityOrganization = city, addressOrganization = address, postalOrganization = postal)
-    new_organization.save()
+    nameOrg    = request.POST['nameOrg']
+    taxIdOrg   = request.POST['taxIdOrg']
+    countryOrg = request.POST['countryOrg']
+    cityOrg    = request.POST['cityOrg']
+    addressOrg = request.POST['addressOrg']
+    emailOrg   = request.POST['emailOrg']
 
-    return redirect('/')
+    country      = models.TbCountry.objects.get(id_Country= countryOrg)
+    city         = models.TbCity.objects.get(id_City= cityOrg)
+    organization = models.Organization.objects.filter(nameOrganization = nameOrg)
+
+    if organization:
+        messages.warning(request, "La organizacion ya fue ingresada")
+        return redirect(to='home')
+    else:
+        #instance new organization
+        new_organization = models.TbOrganization(nameOrganization = nameOrg, taxIdOrganization = taxIdOrg, id_Country = country, id_City = city, addressOrganization = addressOrg, contactEmailOrganization = emailOrg)
+        new_organization.save()
+        messages.success(request, "Organizacion ingresada exitosamente")
+        return redirect(to='home')
+
 
 
 # Delete organization --------------------------------------------------------------------------------------

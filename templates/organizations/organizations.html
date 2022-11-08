@@ -12,7 +12,7 @@
         </div>
       </div>
       <!-- Table -->
-      <div class="table-responsive p-5" >
+      <div class="table-responsive p-3" >
 
         <table id="dataTable" class="dataTable table table-striped table-hover mt-3">
           <thead class="table-dark text-center">
@@ -29,14 +29,14 @@
           <tbody class="p-4">
             {% for organization in organizations %}
               <tr>
-                <td> {{ organization.idOrganization      }}</td>
+                <td> {{ organization.id_Organization     }}</td>
                 <td> {{ organization.nameOrganization    }}</td>
                 <td> {{ organization.taxIdOrganization   }}</td>
-                <td> {{ organization.countryOrganization }}</td>
-                <td> {{ organization.cityOrganization    }}</td>
+                <td> {{ organization.id_City_id   }}</td>
+                <td> {{ organization.id_Country_id }}</td>
                 <td> {{ organization.addressOrganization }}</td>
                 <td class="text-center">
-                    <a href="{% url 'organization' organization.idOrganization %}"><button class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="informacion"><i class="bi bi-info-circle"></i></button></a>
+                    <a href="{% url 'organization' organization.id_Organization %}"><button class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="informacion"><i class="bi bi-info-circle"></i></button></a>
                     <a href=""><button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="eliminar"><i class="bi bi-x-circle"></i></button></a>
                 </td>
               </tr>
@@ -46,7 +46,71 @@
         <!-- Add Organization -->
         <div class="row mt-2">
           <div class="col">
-              <a href="{% url 'form_addOrganization' %}"><button class="btn btn-success" >Agregar</button></a>
+              <!-- Button modal add_organization  -->
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOrganizationModal">
+                Agregar
+              </button>
+              <!-- Modal add_device -->
+              <div class="modal fade" id="addOrganizationModal" tabindex="-1" aria-labelledby="addOrganizationModal" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addSettingsTypeModal">Agregar Organizacion</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="container shadow p-4 bg-body rounded ">
+                        <div class="card-body mx-auto" style="max-width: 700px;">
+                            <form action="{% url 'add_organization' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-outline mb-4">
+                                    <input type="text" name = "nameOrg" class="form-control" placeholder=" Nombre Organizacion" required>
+                                </div>
+                                <div class="form-outline mb-4">
+                                  <input type="emailOrg" name = "emailOrg" class="form-control" placeholder="Correo" required>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <input type="text" name = "addressOrg" class="form-control" placeholder="Direccion" required>
+                                </div>
+                                <div class="row">
+                                  <div class="col mb-4">
+                                      <div class="form-outline">
+                                          <input type="number" name = "taxIdOrg" class="form-control" placeholder="Tax ID" required>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mb-4">
+                                        <div class="form-outline">
+                                          <select name="countryOrg" class="form-select p-2 mb-3" aria-label=".form-select-lg" required>
+                                            <option hidden selected>Pais</option>
+                                            {% for country in countries %}
+                                              <option value="{{country.id_Country}}">{{country.nameCountry}}</option>
+                                            {% endfor %}
+                                          </select>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-4">
+                                        <div class="form-outline">
+                                          <select name="cityOrg" class="form-select p-2 mb-3" aria-label=".form-select-lg" required>
+                                            <option hidden selected>Ciudad</option>
+                                            {% for city in citys %}
+                                              <option value="{{city.id_City}}">{{city.nameCity}}</option>
+                                            {% endfor %}
+                                          </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary ">Agregar</button>
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </div>
@@ -80,7 +144,6 @@
               </tr>
             </thead>
             <tbody>
-  
               {% for org in organizaciones  %}
               <tr>
                 <th scope="row" style="text-align: left;">{{ org.id_org }}</th>
@@ -95,7 +158,7 @@
                   <button class="btn btn-outline-primary">Consultar</button>
                   </form>
                 </td>
-              </tr>         
+              </tr>
               {% endfor %}
             </tbody>
           </table>
